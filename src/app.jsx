@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './app.module.css';
 import VideoList from './screen/video_list/video_list';
 import Serch from './screen/serch/serch';
@@ -8,13 +8,13 @@ function App({youtube}) {
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  const search = query =>{
+  const search = useCallback(query =>{
   
       youtube
       .search(query)//
-      .then(videos => setVideos(videos));
-    
-  }
+      .then(videos => setVideos(videos), setSelectedVideo(null));
+  
+  }, [youtube]);
 
   const selectVideo = (video) =>{
     setSelectedVideo(video);
@@ -24,10 +24,10 @@ function App({youtube}) {
     youtube
     .mostPopular()//
     .then(videos => setVideos(videos));
-  }, []);
+  }, [youtube]);
   return(
   <div className={styles.app}>
-  <Serch onSearch={search}/>
+  <Serch onSearch={search} />
   <section className={styles.content}> 
   {selectedVideo && (
  <div className={styles.detail}>
