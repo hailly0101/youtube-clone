@@ -1,29 +1,42 @@
+import axios from "axios";
+
 class Youtube{
     constructor(key){
-        this.key = key;
-        this.getRequestOptions = {
-            method: 'GET', 
-            redirect: 'follow',
-        }
+        this.Youtube = axios.create({
+            baseURL: 'https://www.googleapis.com/youtube/v3',
+            params: {key : key},
+        });
+    
     }
 
 
     async mostPopular(){
+
+        const response = await this.Youtube.get('videos',{
+            params:{
+                part: 'snippet', 
+                chart: 'mostPopular', 
+                maxResults : 25, 
+            }
+        });
   
-      const response = await fetch(
-        `https://www.googleapis.com/youtube/v3/videos?key=${this.key}&part=snippet&chart=mostPopular&maxResults=25`,
-        this.getRequestOptions
-    );
-    const result_1 = await response.json();
-    return result_1.items;
+        return response.date.items; // 라이브러리 자체에서 제이슨 변환을 해주기 때문에 따로 제이슨 변환을 해줄 필요는 없다. 
+    
 }
 
     async search(query){
+
+        const response = await this.Youtube.get('search', {
+            params:{
+                part: 'snippet',
+                maxResults: 25,
+                type: 'video',
+                q: query,
+                
+            }
+        })
       
-    const response = await fetch(`https://www.googleapis.com/youtube/v3/search?maxResults=25&q=${query}&type=video&part=snippet&key=${this.key}`,
-        this.getRequestOptions);
-    const result_1 = await response.json();
-    return result_1.items.map(item => ({ ...item, id: item.id.videoId }));
+        return response.data.items.map(item => ({...item, id: item.id.videoId}));
   
 }
 
