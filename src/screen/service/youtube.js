@@ -1,18 +1,15 @@
 import axios from "axios";
 
 class Youtube{
-    constructor(key){
-        this.Youtube = axios.create({
-            baseURL: 'https://www.googleapis.com/youtube/v3',
-            params: {key : key},
-        });
+    constructor(httpClient){
+      this.youtube = httpClient;
     
     }
 
 
     async mostPopular(){
 
-        const response = await this.Youtube.get('videos',{
+        const response = await this.youtube.get('videos',{
             params:{
                 part: 'snippet', 
                 chart: 'mostPopular', 
@@ -26,7 +23,7 @@ class Youtube{
 
     async search(query){
 
-        const response = await this.Youtube.get('search', {
+        const response = await this.youtube.get('search', {
             params:{
                 part: 'snippet',
                 maxResults: 25,
