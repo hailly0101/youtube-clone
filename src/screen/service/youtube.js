@@ -17,7 +17,7 @@ class Youtube{
             }
         });
   
-        return response.date.items; // 라이브러리 자체에서 제이슨 변환을 해주기 때문에 따로 제이슨 변환을 해줄 필요는 없다. 
+        return response.data.items; // 라이브러리 자체에서 제이슨 변환을 해주기 때문에 따로 제이슨 변환을 해줄 필요는 없다. 
     
 }
 
